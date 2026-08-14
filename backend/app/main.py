@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.db.base import Base
@@ -43,6 +44,11 @@ app.include_router(forms.router)
 app.include_router(questions.router)
 app.include_router(responses.router)
 app.include_router(public.router)
+
+
+@app.get("/", tags=["meta"])
+def root() -> RedirectResponse:
+    return RedirectResponse(url="https://type-from-clone.vercel.app/", status_code=302)
 
 
 @app.get("/health", tags=["meta"])
