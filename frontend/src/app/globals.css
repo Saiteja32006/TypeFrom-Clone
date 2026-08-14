@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Default palette. The respondent flow overrides these per form theme by
+     setting the same variables inline on its root element. */
+  :root {
+    --c-ink: 38 38 39;
+    --c-ink-soft: 75 75 76;
+    --c-ink-muted: 122 122 124;
+    --c-canvas: 250 250 249;
+    --c-line: 230 230 229;
+    --c-accent: 4 69 175;
+    --c-accent-soft: 232 239 251;
+    --c-positive: 14 138 95;
+    --c-danger: 210 69 59;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-canvas text-ink;
+  }
+
+  /* Focus is never removed, only restyled -- keyboard users need to see it. */
+  :focus-visible {
+    outline: 2px solid theme("colors.accent.DEFAULT");
+    outline-offset: 2px;
+  }
+
+  /* Respect a reduced-motion preference: the respondent flow is heavily animated. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .focus-ring {
+    @apply outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+  }
+
+  /*
+   * The respondent flow's text input: an underline that thickens on focus,
+   * matching Typeform's fill experience rather than a boxed form field.
+   */
+  .runner-input {
+    @apply w-full border-b-2 border-ink/25 bg-transparent pb-2 text-2xl font-normal
+           text-ink caret-accent transition-colors placeholder:text-ink/25
+           focus:border-accent focus:outline-none sm:text-3xl;
+  }
+
+  .runner-choice {
+    @apply flex w-full items-center gap-3 rounded-lg border-2 border-ink/20 bg-white/70
+           px-4 py-3 text-left text-lg text-ink transition-all
+           hover:border-ink/50 hover:bg-white focus-visible:border-accent focus-visible:outline-none;
+  }
+
+  .runner-choice-selected {
+    @apply border-accent bg-accent-soft;
+  }
+
+  /* Letter badge (A, B, C...) shown on each choice, as Typeform does. */
+  .choice-key {
+    @apply grid h-6 w-6 shrink-0 place-items-center rounded border border-current
+           text-xs font-semibold uppercase;
+  }
+}
